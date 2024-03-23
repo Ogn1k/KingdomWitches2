@@ -6,11 +6,16 @@ public class Damage : MonoBehaviour
 {
     public int damage = 1;
     public float immunityTime = 1.5f;
-    private Player player;
+    public Player player;
 
     void Start()
     {
         player = Player.FindFirstObjectByType(typeof(Player)) as Player;
+    }
+
+    void Update()
+    {
+        
     }
 
     private void OnTriggerStay2D(Collider2D collision)

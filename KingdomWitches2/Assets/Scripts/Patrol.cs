@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Patrol : MonoBehaviour
 {
-    private int i;
-    private bool flipRight;
     public float speed = 3;
     public Transform[] movePoint;
     public Transform player;
+    public int i;
+    public bool flipRight;
     public LayerMask playerLayer;
     public float foundRadius = 6.5f;
 
