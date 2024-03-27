@@ -22,7 +22,7 @@ public class Damage : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            player.StartCoroutine(player.damage(damage, immunityTime));
+            //player.StartCoroutine(player.damage(damage, immunityTime));
         }
     }
 }
