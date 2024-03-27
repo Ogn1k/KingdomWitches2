@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +33,10 @@ public class Player : Entity
     SpriteRenderer spriteRenderer;
     PlayerController controller;
 
+    int hpCount = 0;
+    public GameObject hpPrefab;
+    List<GameObject> hp = new List<GameObject>();
+
     public static Player instance;
 
     //PUBLICS
@@ -51,9 +56,18 @@ public class Player : Entity
 
         if (!invincible)
         {
+            
             SubtractHealth(damage);
             SetVelocity(Vector2.up * 8.0f);
             StartCoroutine(SetInvincible());
+            if(health > 0) 
+            {
+                for (int i = 0; i < damage; i++)
+                {
+                    hp[hpCount+i].GetComponent<RawImage>().color = Color.green;
+                }
+            }
+            hpCount++;
         }
 
     }
@@ -75,6 +89,12 @@ public class Player : Entity
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
+
+        for(int i = 0; i < maxHealth; i++) 
+        {
+            hp.Add(Instantiate(hpPrefab, GameObject.Find("HpBar").transform.position + new Vector3(i-1, 0), Quaternion.identity, GameObject.Find("HpBar").transform));
+            hp[i].GetComponent<RawImage>().color = Color.white; 
+        }
     }
 
     private void Update()

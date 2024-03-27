@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Entity : MonoBehaviour
 {
     public int maxHealth = 3;
-    private int health;
+    [SerializeField] protected int health;
 
     protected virtual void Awake()
     {
@@ -36,5 +37,6 @@ public class Entity : MonoBehaviour
     protected virtual void Die()
     {
         Debug.Log("lol u died");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
