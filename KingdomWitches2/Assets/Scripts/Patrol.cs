@@ -21,6 +21,7 @@ public class Patrol : MonoBehaviour
     
     void Update()
     {
+        
         if (isNear())
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
@@ -35,26 +36,32 @@ public class Patrol : MonoBehaviour
         }
         else
         {
-            transform.position = Vector2.MoveTowards(transform.position, movePoint[i].position, speed * Time.deltaTime);
-            if ((transform.position.x > movePoint[i].position.x) && !flipRight)
+            if (movePoint.Length > 0)
             {
-                flip();
+                transform.position = Vector2.MoveTowards(transform.position, movePoint[i].position, speed * Time.deltaTime);
+                if ((transform.position.x > movePoint[i].position.x) && !flipRight)
+                {
+                    flip();
+                }
+                else if ((transform.position.x < movePoint[i].position.x) && flipRight)
+                {
+                    flip();
+                }
             }
-            else if ((transform.position.x < movePoint[i].position.x) && flipRight)
-            {
-                flip();
-            }
+            
         }
-
-        if (Vector2.Distance(transform.position, movePoint[i].position) < 0.2f)
+        if (movePoint.Length > 0)
         {
-            if (i > 0)
+            if (Vector2.Distance(transform.position, movePoint[i].position) < 0.2f)
             {
-                i = 0;
-            }
-            else
-            {
-                i = 1;
+                if (i > 0)
+                {
+                    i = 0;
+                }
+                else
+                {
+                    i = 1;
+                }
             }
         }
     }

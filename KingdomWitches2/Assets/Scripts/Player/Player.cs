@@ -18,7 +18,7 @@ public class Player : Entity
     bool invincible;
     bool forceApplied;
 
-    float moveSpeed = 6f;
+    public float moveSpeed = 6f;
     float gravity;
     float maxJumpVelocity;
     float minJumpVelocity;

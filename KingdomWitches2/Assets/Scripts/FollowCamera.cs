@@ -40,7 +40,7 @@ public class FollowCamera : MonoBehaviour
                 z = this.playerTransform.position.z - 10,
             };
 
-            Vector3 pos = Vector3.Lerp(a: this.transform.position, b: target, t: movingSpeed * Time.deltaTime);
+            Vector3 pos = Vector3.Lerp(a: this.transform.position + new Vector3(0,0.0005f,0), b: target, t: movingSpeed * Time.deltaTime);
 
             this.transform.position = pos;
         }

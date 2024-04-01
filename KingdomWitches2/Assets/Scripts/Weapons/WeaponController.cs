@@ -7,35 +7,47 @@ public class WeaponController : MonoBehaviour
 {
 
     public List<Weapon> weaponsOwned;
+    public int weaponCount;
 
     private float attackRate = .1f;
 
     private float nextAttack;
 
+    public Vector2 PointerPosition { get; set; }
+
     private int equippedWeaponID;
     private Weapon equippedWeapon;
     Player player;
-    SpriteRenderer weaponRenderer;
-    Transform weaponTransform;
 
 
     void Start()
     {
         player = Player.instance;
-        weaponRenderer = GetComponentInChildren<SpriteRenderer>();
-        weaponTransform = weaponRenderer.transform;
-        InitWeapon();
+        weaponCount = weaponsOwned.Count;
+        if (weaponCount > 0)
+        {
+            InitWeapon();
+        }
     }
 
     private void InitWeapon()
     {
+        foreach (Weapon item in weaponsOwned)
+        {
+            if (!item.fired)
+            {
+                item.switched = true;
+                item.gameObject.SetActive(false);
+            }
+        }
         equippedWeapon = weaponsOwned[equippedWeaponID];
-        weaponRenderer.sprite = equippedWeapon.sprite;
+        equippedWeapon.gameObject.SetActive(true);
+        equippedWeapon.switched = false;
     }
     void Update()
     {
+        
         SwitchingWeapons();
-        Attack();
     }
     private void SwitchingWeapons()
     {
@@ -48,17 +60,15 @@ public class WeaponController : MonoBehaviour
 
         if(weaponIDMod != 0) 
         {    
-            equippedWeaponID = (equippedWeaponID + weaponIDMod + weaponsOwned.Count) % weaponsOwned.Count;
+            equippedWeaponID = (equippedWeaponID + weaponIDMod + weaponCount) % weaponCount;
             InitWeapon();
         }
     }
 
-    private void Attack()
+    public void NextWeapon()
     {
-        if(Input.GetButtonDown("Fire2")) { }
-            //weeee
-
-
+        equippedWeaponID = (equippedWeaponID + 1 + weaponCount) % weaponCount;
+        InitWeapon();
     }
 
 

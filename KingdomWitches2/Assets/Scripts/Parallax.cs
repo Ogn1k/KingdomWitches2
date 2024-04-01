@@ -11,17 +11,17 @@ public class Parallax : MonoBehaviour
     void Start()
     {
         if (!followingTarget)
-            followingTarget = Camera.main.transform;
-        targetPreviousPosition = followingTarget.position;
+            followingTarget = Camera.main.transform ;
+        targetPreviousPosition = followingTarget.position - new Vector3(0, 2f, 0);
     }
     void Update()
     {
-        var delta = followingTarget.position - targetPreviousPosition;
+        var delta = (followingTarget.position - new Vector3(0, 2f, 0)) - targetPreviousPosition;
         if (disableVerticalParallax)
         {
             delta.y = 0;
         }
-        targetPreviousPosition = followingTarget.position;
+        targetPreviousPosition = followingTarget.position - new Vector3(0, 2f, 0);
 
         transform.position += delta * parallaxStrength;
     }
