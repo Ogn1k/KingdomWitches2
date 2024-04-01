@@ -2625,13 +2625,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2097178119}
+  - component: {fileID: 2097178120}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2097178119
 Transform:
   m_ObjectHideFlags: 0
@@ -2647,6 +2648,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2097178120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097178118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 869b5400b8bd04544bbe4d35d15bf9b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  morphs:
+  - {fileID: 11400000, guid: aed9428872b296f47ae7f7fb80f58873, type: 2}
+  - {fileID: 11400000, guid: b9074b02cc265de4cacf731e67fea5fc, type: 2}
+  morphObjects: []
+  morhpCount: 0
+  player: {fileID: 3945672369070046878}
+  camera: {fileID: 2046897853}
 --- !u!1001 &971732436555429866
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2796,6 +2816,10 @@ PrefabInstance:
     - target: {fileID: 3945672369700652842, guid: 07f24da840a43b64c913e543b4193da0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6416765240991517520, guid: 07f24da840a43b64c913e543b4193da0, type: 3}
+      propertyPath: maxHealth
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9051970987326772653, guid: 07f24da840a43b64c913e543b4193da0, type: 3}
       propertyPath: m_Name

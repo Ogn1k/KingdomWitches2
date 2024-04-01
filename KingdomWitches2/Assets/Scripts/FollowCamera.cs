@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
-    [SerializeField] private Transform playerTransform;
+    public Transform playerTransform;
     [SerializeField] private string playerTag;
     [SerializeField] private float movingSpeed;
 
