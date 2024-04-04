@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,6 +37,15 @@ public class Player : Entity
     int hpCount = 0;
     public GameObject hpPrefab;
     List<GameObject> hp = new List<GameObject>();
+
+    float lastButtonPress;
+    //float timeSinceLastPress;
+
+    bool canDash = true;
+    bool isDashing;
+    float dashPower = 24;
+    float dashTime = 0.2f;
+    float dashCooldown = 1;
 
     public static Player instance;
 
@@ -113,17 +123,34 @@ public class Player : Entity
     private void GetInput()
     {
 
+        if (isDashing) return;
+
         movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         direction = facingRight ? Direction.RIGHT : Direction.LEFT;
 
+        
+
         //If moving horizontally
         if (movementInput.x != 0)
-        {
+        {            
             direction = movementInput.x < 0 ? Direction.RIGHT : Direction.LEFT;
             facingRight = movementInput.x < 0;
+            
         }
 
+        if(Input.GetButtonDown("Horizontal"))
+        {
+            
+            float timeSinceLastPress = Time.time - lastButtonPress;
+            if (timeSinceLastPress <= 0.2)
+            {
+                print("debug");
+                StartCoroutine(Dash());
+            }
+            
+            lastButtonPress = Time.time;
+        }
         float verticalAimFactor = movementInput.y;
         if (controller.collisions.below)
         {
@@ -137,6 +164,23 @@ public class Player : Entity
         }
 
     }
+
+    private IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        gravity = 0;
+        float originMS = moveSpeed;
+        moveSpeed = 30;
+        yield return new WaitForSeconds(dashTime);
+        moveSpeed = originMS;
+        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+
+    }
+
 
     private void Animation()
     {
