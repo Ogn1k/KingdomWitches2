@@ -172,8 +172,12 @@ public class Player : Entity
         gravity = 0;
         float originMS = moveSpeed;
         moveSpeed = 30;
+        float originTI = timeInvincible;
+        timeInvincible = dashTime;
+        SetInvincible();
         yield return new WaitForSeconds(dashTime);
         moveSpeed = originMS;
+        timeInvincible = originTI;
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
