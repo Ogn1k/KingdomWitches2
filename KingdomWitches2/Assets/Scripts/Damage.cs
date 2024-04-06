@@ -18,11 +18,11 @@ public class Damage : MonoBehaviour
         
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.collider.tag == "Player")
+        if (collision.tag == "Player")
         {
-            player.ApplyDamage(damage);
+            //player.StartCoroutine(player.damage(damage, immunityTime));
         }
     }
 }
