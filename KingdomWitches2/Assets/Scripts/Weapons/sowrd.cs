@@ -58,7 +58,6 @@ public class sowrd : Weapon
             animator.SetBool("Attack2", false);
             attackBlocked = false;
         }
-            
     }
 
     public void Attack()
