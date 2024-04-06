@@ -8,6 +8,8 @@ public class LootableCrystal : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
+            Player player = collision.gameObject.GetComponentInParent<Player>();
+
             Destroy(gameObject);
         }
     }

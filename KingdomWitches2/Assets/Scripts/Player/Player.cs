@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,6 +38,15 @@ public class Player : Entity
     public GameObject hpPrefab;
     List<GameObject> hp = new List<GameObject>();
 
+    float lastButtonPress;
+    //float timeSinceLastPress;
+
+    bool canDash = true;
+    bool isDashing;
+    float dashPower = 24;
+    float dashTime = 0.2f;
+    float dashCooldown = 1;
+
     public static Player instance;
 
     //PUBLICS
@@ -68,6 +78,41 @@ public class Player : Entity
                 }
             }
             hpCount++;
+        }
+
+    }
+
+    public IEnumerator addBuff(string buff, int buffStrength, float duration)
+    {
+        switch(buff)
+        {
+            case "speed":
+                moveSpeed += buffStrength;
+                yield return new WaitForSeconds(duration);
+                moveSpeed -= buffStrength;
+                break;
+            case "jump":
+                maxJumpVelocity += buffStrength;
+                minJumpVelocity += buffStrength;
+                yield return new WaitForSeconds(duration);
+                maxJumpVelocity -= buffStrength;
+                minJumpVelocity -= buffStrength;
+                break;
+            case "damage":
+                sowrd sword = gameObject.GetComponentInChildren<sowrd>();
+                sword.damage += buffStrength;
+                pitchfork pitchfork = gameObject.GetComponentInChildren<pitchfork>();
+                pitchfork.damage += buffStrength;
+                yield return new WaitForSeconds(duration);
+                sword.damage -= buffStrength;
+                pitchfork.damage -= buffStrength;
+                break;
+            case "challenge":
+                Transform camera = FindAnyObjectByType<FollowCamera>().transform;
+                camera.Rotate(new Vector3(0, 0, 180));
+                yield return new WaitForSeconds(duration);
+                camera.Rotate(new Vector3(0, 0, 180));
+                break;
         }
 
     }
@@ -113,17 +158,34 @@ public class Player : Entity
     private void GetInput()
     {
 
+        if (isDashing) return;
+
         movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         direction = facingRight ? Direction.RIGHT : Direction.LEFT;
 
+        
+
         //If moving horizontally
         if (movementInput.x != 0)
-        {
+        {            
             direction = movementInput.x < 0 ? Direction.RIGHT : Direction.LEFT;
             facingRight = movementInput.x < 0;
+            
         }
 
+        if(Input.GetButtonDown("Horizontal"))
+        {
+            
+            float timeSinceLastPress = Time.time - lastButtonPress;
+            if (timeSinceLastPress <= 0.2)
+            {
+                print("debug");
+                StartCoroutine(Dash());
+            }
+            
+            lastButtonPress = Time.time;
+        }
         float verticalAimFactor = movementInput.y;
         if (controller.collisions.below)
         {
@@ -135,6 +197,26 @@ public class Player : Entity
         {
             direction = verticalAimFactor > 0 ? Direction.UP : Direction.DOWN;
         }
+
+    }
+
+    private IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        gravity = 0;
+        float originMS = moveSpeed;
+        moveSpeed = 30;
+        float originTI = timeInvincible;
+        timeInvincible = dashTime;
+        SetInvincible();
+        yield return new WaitForSeconds(dashTime);
+        moveSpeed = originMS;
+        timeInvincible = originTI;
+        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
 
     }
 

@@ -45,11 +45,13 @@ public class sowrd : Weapon
 
         if (Input.GetButton("Fire1") && !switched)
         {
+            tag = "Weapon";
             isAttack = true;
             Attack();
         }
         else
         {
+            tag = "Untagged";
             isAttack = false;
             animator.SetBool("Attack", false);
             combo = 0;
