@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -11,6 +12,7 @@ public class pitchfork : Weapon
     Vector3 mousePos;
     BoxCollider2D bc;
     SerializedProperty asd;
+    bool canPickUp;
 
     public WeaponController controller;
     void Start()
@@ -20,6 +22,7 @@ public class pitchfork : Weapon
         bc = this.GetComponent<BoxCollider2D>();
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         bc.enabled = false;
+
         
         transform.SetParent(GameObject.Find("Holster").transform);
         //controller = transform.gameObject.GetComponent<WeaponController>();
@@ -28,7 +31,7 @@ public class pitchfork : Weapon
     
     void Update()
     {
-        if(!fired) 
+        if (!fired) 
         {
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
@@ -41,18 +44,29 @@ public class pitchfork : Weapon
                 CalculateThrowVector();
                 SetArrow();
                 Throw();
+                StartCoroutine(PickUpDelay());
                 fired = true;
                 controller.NextWeapon();
                 controller.weaponCount -= 1;
             }
         }
-        
+        else
+        {
+            if (Math.Abs(rb.velocity.y + rb.velocity.x) >= 5f)
+            {
+                bc.tag = "Weapon";
+            }
+            else
+            {
+                bc.tag = "Untagged";
+            }
+        }
 
     }
 
     void OnCollisionStay2D(Collision2D col)
     {
-        if(fired) 
+        if(fired && canPickUp) 
         {
             if(col.gameObject.CompareTag("Player"))
             {
@@ -68,7 +82,6 @@ public class pitchfork : Weapon
         }
     }
 
-
     void CalculateThrowVector()
     {
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -83,8 +96,16 @@ public class pitchfork : Weapon
         lr.SetPosition(1, throwVector.normalized/2);
         lr.enabled = true;
     }
+
     public void Throw()
     {
         rb.AddForce(throwVector);
+    }
+
+    IEnumerator PickUpDelay()
+    {
+        canPickUp = false;
+        yield return new WaitForSeconds(0.3f);
+        canPickUp = true;
     }
 }

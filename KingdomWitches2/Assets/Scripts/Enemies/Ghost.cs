@@ -4,68 +4,63 @@ using UnityEngine;
 
 public class Ghost : Entity
 {
-    private int i;
-    private bool flipRight;
-    private Transform player;
     public bool canSeePlayer;
     public float speed = 3;
-    public Transform[] movePoint;
     public float foundRadius = 6.5f;
     public float timeInvincible = 0.8f;
+    public Transform[] movePoint;
+    
+    private int i;
+    private float minFoundRadius;
+    private float maxFoundRadius;
+    private bool flipRight;
+    private Transform player;
     private bool invincible;
 
     private SpriteRenderer sr;
     void Start()
     {
+        minFoundRadius = foundRadius;
+        maxFoundRadius = foundRadius * 1.3f;
         sr = GetComponent<SpriteRenderer>();
         player = (FindAnyObjectByType(typeof(Player)) as Player).transform;
     }
     
     void Update()
     {
-        if (isNear())
-        {
-            Debug.Log("123");
-        }
         if (isNear() && canSeePlayer)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-            if ((transform.position.x > player.position.x) && !flipRight)
-            {
-                flip();
-            }
-            else if ((transform.position.x < player.position.x) && flipRight)
-            {
-                flip();
-            }
+            foundRadius = maxFoundRadius;
+            move(player);
         }
         else if (movePoint.Length > 0)
         {
-            transform.position = Vector2.MoveTowards(transform.position, movePoint[i].position, speed * Time.deltaTime);
-            if ((transform.position.x > movePoint[i].position.x) && !flipRight)
+            foundRadius = minFoundRadius;
+            move(movePoint[i]);
+            if (Vector2.Distance(transform.position, movePoint[i].position) < 0.2f)
             {
-                flip();
-            }
-            else if ((transform.position.x < movePoint[i].position.x) && flipRight)
-            {
-                flip();
+                if (i == movePoint.Length - 1)
+                {
+                    i = 0;
+                }
+                else
+                {
+                    i++;
+                }
             }
         }
-        else
-        {
-            return;
-        }
+    }
 
-        if (Vector2.Distance(transform.position, movePoint[i].position) < 0.2f)
+    private void move(Transform target)
+    {
+        transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        if ((transform.position.x > target.position.x) && !flipRight)
         {
-            if (i == movePoint.Length - 1)
-            {
-                i = 0;
-            }
-            else
-            {
-                i++;
-            }
+            flip();
+        }
+        else if ((transform.position.x < target.position.x) && flipRight)
+        {
+            flip();
         }
     }
 
@@ -91,6 +86,21 @@ public class Ghost : Entity
             if (health <= 0)
             {
                 Destroy(gameObject); 
+                return;
+            }
+            StartCoroutine(SetInvincible());
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Weapon" && !invincible)
+        {
+            Weapon weapon = collision.collider.GetComponent<Weapon>();
+            health -= weapon.damage;
+            if (health <= 0)
+            {
+                Destroy(gameObject);
                 return;
             }
             StartCoroutine(SetInvincible());

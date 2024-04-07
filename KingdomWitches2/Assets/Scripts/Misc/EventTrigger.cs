@@ -7,10 +7,11 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
-public class EventSystem : MonoBehaviour
+public class EventTrigger : MonoBehaviour
 {
     private bool isActivated;
     private bool inArea;
+
     public bool onButtonClick;
     public GameObject button;
     public UnityEvent TriggerActivate;

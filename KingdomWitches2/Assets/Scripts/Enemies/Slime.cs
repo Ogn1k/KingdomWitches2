@@ -6,24 +6,29 @@ using UnityEngine.UIElements;
 
 public class Slime : Entity
 {
-    private int i;
-    private bool flipRight;
-    private Transform player;
     public bool canSeePlayer;
     public float speed = 3;
-    public Transform[] movePoint;
     public float foundRadius = 6.5f;
     public float timeInvincible = 0.8f;
     public float jumpForce = 5f;
+    public Transform[] movePoint;
     public LayerMask groundLayer;
+
+    private int i;
+    private float minFoundRadius;
+    private float maxFoundRadius;
+    private Transform player;
     private Rigidbody2D rb;
     private Collider2D coll;
+    private bool flipRight;
     private bool invincible;
     private bool canJump = true;
 
     private SpriteRenderer sr;
     void Start()
     {
+        minFoundRadius = foundRadius;
+        maxFoundRadius = foundRadius * 1.3f;
         coll = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
@@ -34,12 +39,14 @@ public class Slime : Entity
     {
         if (isNear() && canSeePlayer)
         {
+            foundRadius = maxFoundRadius;
             move(player.transform);
         }
         else if (movePoint.Length > 0)
         {
+            foundRadius = minFoundRadius;
             move(movePoint[i]);
-            if (Vector2.Distance(transform.position, movePoint[i].position) < 0.3f)
+            if (Vector2.Distance(transform.position, movePoint[i].position) < 0.4f)
             {
                 if (i == movePoint.Length - 1)
                 {
@@ -123,6 +130,21 @@ public class Slime : Entity
         if (collision.tag == "Weapon" && !invincible)
         {
             Weapon weapon = collision.GetComponent<Weapon>();
+            health -= weapon.damage;
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            StartCoroutine(SetInvincible());
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Weapon" && !invincible)
+        {
+            Weapon weapon = collision.collider.GetComponent<Weapon>();
             health -= weapon.damage;
             if (health <= 0)
             {
