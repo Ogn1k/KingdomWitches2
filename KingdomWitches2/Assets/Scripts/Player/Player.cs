@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerController))]
@@ -78,6 +79,11 @@ public class Player : Entity
                 }
             }
             hpCount++;
+
+            if (state == State.Died)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
 
     }
@@ -137,9 +143,9 @@ public class Player : Entity
 
         for(int i = 0; i < maxHealth; i++) 
         {
-            Vector2 tempu = GameObject.Find("HpBar").GetComponent<RectTransform>().offsetMax;
-            hp.Add(Instantiate(hpPrefab, GameObject.Find("HpBar").transform.position , Quaternion.identity, GameObject.Find("HpBar").transform));
-            GameObject.Find("HpBar").GetComponent<RectTransform>().offsetMax = tempu + new Vector2((i * 80), 0);
+            Vector2 tempu = GameObject.Find("PlayerHpBar").GetComponent<RectTransform>().offsetMax;
+            hp.Add(Instantiate(hpPrefab, GameObject.Find("PHPBGrid").transform.position , Quaternion.identity, GameObject.Find("PHPBGrid").transform));
+            GameObject.Find("PlayerHpBar").GetComponent<RectTransform>().offsetMax = tempu + new Vector2((i * 75), 0);
             hp[i].GetComponent<RawImage>().color = Color.white; 
         }
     }

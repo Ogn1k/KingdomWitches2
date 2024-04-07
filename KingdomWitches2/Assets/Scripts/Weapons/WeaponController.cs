@@ -30,6 +30,7 @@ public class WeaponController : MonoBehaviour
             if (!item.fired)
             {
                 item.switched = true;
+                item.WeaponSwitched();
                 item.gameObject.SetActive(false);
             }
         }

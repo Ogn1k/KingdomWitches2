@@ -66,10 +66,13 @@ public class pitchfork : Weapon
 
     void OnCollisionStay2D(Collision2D col)
     {
-        if(fired && canPickUp) 
+        if(fired) 
         {
-            if(col.gameObject.CompareTag("Player"))
+            if(col.gameObject.CompareTag("Player") && canPickUp)
             {
+                rb.freezeRotation = false;
+                rb.gravityScale = 1;
+                rb.mass = 1;
                 rb.constraints = RigidbodyConstraints2D.FreezePosition;
                 bc.enabled = false;
                 transform.SetParent(GameObject.Find("Holster").transform);
@@ -78,8 +81,25 @@ public class pitchfork : Weapon
                 controller.NextWeapon();
                 controller.weaponCount += 1;
             }
-
+            if(col.gameObject.CompareTag("Enemy"))
+            {
+                transform.SetParent(col.gameObject.transform);
+                rb.constraints = RigidbodyConstraints2D.FreezePosition;
+                rb.gravityScale = 0;
+                rb.mass = 0;
+                rb.freezeRotation = true;
+                if(col.gameObject.GetComponent<Entity>().state == Entity.State.Died)
+                {
+                    transform.SetParent(null);
+                    rb.constraints = RigidbodyConstraints2D.None;
+                    bc.enabled = true;
+                    rb.freezeRotation = false;
+                    rb.gravityScale = 1;
+                    rb.mass = 1;
+                }
+            }
         }
+
     }
 
     void CalculateThrowVector()

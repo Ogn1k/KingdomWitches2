@@ -8,9 +8,18 @@ public class Entity : MonoBehaviour
     public int maxHealth = 3;
     [SerializeField] protected int health;
 
+    public enum State
+    {
+        Living,
+        Died
+    };
+
+    public State state;
+
     protected virtual void Awake()
     {
         health = maxHealth;
+        state = State.Living;
     }
 
     public void AddHealth(int m) { ModHealth(m); }
@@ -26,6 +35,7 @@ public class Entity : MonoBehaviour
     {
         if (health <= 0)
         {
+            health = 0;
             Die();
         }
         else if (health > maxHealth)
@@ -36,7 +46,8 @@ public class Entity : MonoBehaviour
 
     protected virtual void Die()
     {
+        state = State.Died;
         Debug.Log("lol u died");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //
     }
 }

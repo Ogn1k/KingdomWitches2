@@ -8,20 +8,20 @@ public class sowrd : Weapon
 {
 
     Animator animator;
-    private bool attackBlocked;
-    public Transform player;
+    bool attackBlocked;
 
+    public Transform player;
     public Transform holster;
 
     public int combo = 0;
-    public float delay = 0.3f;
-    public bool isAttack = false;
+    public float delay = .5f;
 
    // bool fired = false;
 
     void Start()
     {
-        animator = GetComponent<Animator>(); 
+        animator = GetComponent<Animator>();
+        tag = "Untagged";
     }
 
     // Update is called once per frame
@@ -41,6 +41,7 @@ public class sowrd : Weapon
         if (Input.GetButton("Fire1") && !switched)
         {
             if (attackBlocked) return;
+            animator.SetInteger("combo", combo);
             switch(combo)
             {
                 case 0:
@@ -52,24 +53,26 @@ public class sowrd : Weapon
                     combo = 0;
                     break;
             }
-            
+            tag = "Weapon";
             attackBlocked = true;
             StartCoroutine(DelayAttack());
         }
 
     }
 
+    public override void WeaponSwitched()
+    {
+        combo = 0;
+        attackBlocked = false;
+        animator.ResetTrigger("AttackTr");
+        animator.ResetTrigger("AttackTr2");
+    }
+
     IEnumerator DelayAttack()
     {
         yield return new WaitForSeconds(delay);
         attackBlocked = false;
+        tag = "Untagged";
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if( collision.tag == "Enemy")
-        {
-            //babababa;
-        }
-    }
 }
