@@ -137,7 +137,9 @@ public class Player : Entity
 
         for(int i = 0; i < maxHealth; i++) 
         {
-            hp.Add(Instantiate(hpPrefab, GameObject.Find("HpBar").transform.position + new Vector3(i-1, 0), Quaternion.identity, GameObject.Find("HpBar").transform));
+            Vector2 tempu = GameObject.Find("HpBar").GetComponent<RectTransform>().offsetMax;
+            hp.Add(Instantiate(hpPrefab, GameObject.Find("HpBar").transform.position , Quaternion.identity, GameObject.Find("HpBar").transform));
+            GameObject.Find("HpBar").GetComponent<RectTransform>().offsetMax = tempu + new Vector2((i * 80), 0);
             hp[i].GetComponent<RawImage>().color = Color.white; 
         }
     }
@@ -174,17 +176,9 @@ public class Player : Entity
             
         }
 
-        if(Input.GetButtonDown("Horizontal"))
+        if(Input.GetButtonDown("Shift") && canDash)
         {
-            
-            float timeSinceLastPress = Time.time - lastButtonPress;
-            if (timeSinceLastPress <= 0.2)
-            {
-                print("debug");
                 StartCoroutine(Dash());
-            }
-            
-            lastButtonPress = Time.time;
         }
         float verticalAimFactor = movementInput.y;
         if (controller.collisions.below)
@@ -216,6 +210,7 @@ public class Player : Entity
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
+
         canDash = true;
 
     }

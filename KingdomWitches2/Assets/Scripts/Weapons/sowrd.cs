@@ -38,64 +38,31 @@ public class sowrd : Weapon
             holster.localScale = new Vector3(-1, holster.localScale.y, holster.localScale.z);
         }
 
-        /*if(switched)
-        {
-            isAttack = false;
-        }*/
-
         if (Input.GetButton("Fire1") && !switched)
         {
-            tag = "Weapon";
-            isAttack = true;
-            Attack();
+            if (attackBlocked) return;
+            switch(combo)
+            {
+                case 0:
+                    animator.SetTrigger("AttackTr");
+                    combo = 1;
+                    break;
+                case 1:
+                    animator.SetTrigger("AttackTr2");
+                    combo = 0;
+                    break;
+            }
+            
+            attackBlocked = true;
+            StartCoroutine(DelayAttack());
         }
-        else
-        {
-            tag = "Untagged";
-            isAttack = false;
-            animator.SetBool("Attack", false);
-            combo = 0;
-            animator.SetBool("Attack2", false);
-            attackBlocked = false;
-        }
-    }
-
-    public void Attack()
-    {
-        if (attackBlocked) return;
-        switch (combo)
-        {
-            case 0:
-                animator.SetBool("Attack", true);
-                combo = 1;
-                break; 
-            case 1:
-                animator.SetBool("Attack", true);
-                animator.SetBool("Attack2", true);
-                combo = 0;
-                break;
-        }
-
-        attackBlocked = true;
-        StartCoroutine(DelayAttack());
-        //isAttack = true;
 
     }
 
-    private IEnumerator DelayAttack()
+    IEnumerator DelayAttack()
     {
         yield return new WaitForSeconds(delay);
-
-        if(!isAttack) 
-        {
-            animator.SetBool("Attack", false);
-            combo = 0;
-        }
-        animator.SetBool("Attack2", false); 
-            
-        
         attackBlocked = false;
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

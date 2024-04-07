@@ -10,7 +10,7 @@ public class pitchfork : Weapon
     Rigidbody2D rb;
     LineRenderer lr;
     Vector3 mousePos;
-    BoxCollider2D bc;
+    PolygonCollider2D bc;
     SerializedProperty asd;
     bool canPickUp;
 
@@ -19,7 +19,7 @@ public class pitchfork : Weapon
     {
         rb = this.GetComponent<Rigidbody2D>();
         lr = this.GetComponent<LineRenderer>();
-        bc = this.GetComponent<BoxCollider2D>();
+        bc = this.GetComponent<PolygonCollider2D>();
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
         bc.enabled = false;
 
