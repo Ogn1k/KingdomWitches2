@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Player
   description: wawawawa
-  morphPrefab: {fileID: 9051970987326772653, guid: 07f24da840a43b64c913e543b4193da0, type: 3}
+  morphPrefab: {fileID: 4423297386077739816, guid: 07f24da840a43b64c913e543b4193da0, type: 3}
   MorphTag: Player
   SoundPrefab: {fileID: 0}
