@@ -18,6 +18,7 @@ public class Morph : MonoBehaviour
 
     void Start()
     {
+        player.position = playerPosition;
         morhpCount = morphs.Count;
 
         morphObjects.Clear();
@@ -48,10 +49,15 @@ public class Morph : MonoBehaviour
     {
         foreach (GameObject morph in morphObjects)
         {
+            if (morph.tag == "Player")
+                morph.transform.Find("Holster").GetComponent<WeaponController>().HideWeapons();
             morph.gameObject.SetActive(false);
         }
         currentMorph = morphObjects[morphID];
         currentMorph.transform.position = playerPosition;
+        if (currentMorph.tag != "Player")
+            currentMorph.tag = "Morph";
+        currentMorph.transform.rotation = new Quaternion(0, 0, 0, 0);
         camera.playerTransform = currentMorph.transform;
         currentMorph.gameObject.SetActive(true);
     }

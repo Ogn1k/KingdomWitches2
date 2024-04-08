@@ -38,6 +38,20 @@ public class WeaponController : MonoBehaviour
         equippedWeapon.gameObject.SetActive(true);
         equippedWeapon.switched = false;
     }
+
+    public void HideWeapons()
+    {
+        if (weaponCount > 0)
+        {
+            foreach (Weapon item in weaponsOwned)
+            {
+                item.gameObject.SetActive(true);
+                item.switched = true;
+                item.WeaponSwitched();
+                item.gameObject.SetActive(false);
+            }
+        }
+    }
     void Update()
     {
         SwitchingWeapons();

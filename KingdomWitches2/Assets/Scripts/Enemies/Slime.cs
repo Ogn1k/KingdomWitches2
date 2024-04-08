@@ -130,8 +130,8 @@ public class Slime : Entity
         if (collision.tag == "Weapon" && !invincible)
         {
             Weapon weapon = collision.GetComponent<Weapon>();
-            health -= weapon.damage;
-            if (health <= 0)
+            SubtractHealth(weapon.damage);
+            if (state == State.Died)
             {
                 Destroy(gameObject);
                 return;

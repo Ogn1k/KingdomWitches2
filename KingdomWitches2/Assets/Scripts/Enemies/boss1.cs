@@ -14,6 +14,9 @@ public class boss1 : Entity
 
     bool active = false;
     bool invincible = false;
+
+    public GameObject bulletPrefab;
+    public float timer = 0;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -40,7 +43,10 @@ public class boss1 : Entity
                 
             }
         }
-        
+
+        BossActing();
+
+
     }
 
     IEnumerator WaitTillDeath()
@@ -69,6 +75,42 @@ public class boss1 : Entity
             SubtractHealth(weapon.damage);
             StartCoroutine(InvincibleState());
         }
+    }
+    
+    void BossActing()
+    {
+        switch (animator.GetInteger("stage"))
+        { 
+            case 0:
+                break;
+            case 1:
+                timer += Time.deltaTime;
+                transform.Rotate(Vector3.forward, Time.deltaTime *30);
+                if(timer >= 2)
+                {
+                    Stage1();
+                    timer = 0;
+                }    
+                break;
+        }
+
+    }
+
+    void Stage1()
+    {
+        float timer1=0;
+        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        timer1 += Time.deltaTime;
+        //bullet.transform.Translate(Vector3.right * 20 * Time.deltaTime);
+        if (timer1 >= 3f)
+        {
+            Destroy(bullet);
+            timer1= 0;
+        }
+ 
+            
+            //bullet.GetComponent<Rigidbody2D>().AddForce(Vector3.right);
+            
     }
 
     IEnumerator InvincibleState()
