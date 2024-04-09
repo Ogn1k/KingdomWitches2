@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4864222656856725427}
   - component: {fileID: 5989648161046435010}
   - component: {fileID: 5976368759837106651}
+  - component: {fileID: -4869867145503887974}
   - component: {fileID: -7655686936584923471}
   m_Layer: 0
   m_Name: AngryGhost
@@ -126,9 +127,20 @@ MonoBehaviour:
   speed: 5
   foundRadius: 6.5
   timeInvincible: 0.8
-  movePoint:
-  - {fileID: 0}
-  - {fileID: 0}
+  movePoint: []
+--- !u!114 &-4869867145503887974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5965495609378239962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22deacada701c1741bcad5147cb087d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageOnHit: 1
 --- !u!60 &-7655686936584923471
 PolygonCollider2D:
   m_ObjectHideFlags: 0

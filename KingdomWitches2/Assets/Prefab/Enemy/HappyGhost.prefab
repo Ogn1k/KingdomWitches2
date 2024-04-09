@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 5849575143386590720}
   - component: {fileID: 5760864116731431816}
   - component: {fileID: 8245130658980713925}
+  - component: {fileID: -876039690017679971}
   - component: {fileID: 939464335063310839}
-  - component: {fileID: -5892156189438351484}
+  - component: {fileID: -5714915967210415691}
   m_Layer: 0
   m_Name: HappyGhost
   m_TagString: Untagged
@@ -105,9 +106,20 @@ MonoBehaviour:
   speed: 5
   foundRadius: 6.5
   timeInvincible: 0.8
-  movePoint:
-  - {fileID: 0}
-  - {fileID: 0}
+  movePoint: []
+--- !u!114 &-876039690017679971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8665322041739447185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22deacada701c1741bcad5147cb087d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageOnHit: 1
 --- !u!95 &939464335063310839
 Animator:
   serializedVersion: 5
@@ -129,7 +141,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!60 &-5892156189438351484
+--- !u!60 &-5714915967210415691
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
