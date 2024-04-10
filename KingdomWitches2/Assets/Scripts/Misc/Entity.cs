@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Entity : MonoBehaviour
 {
     public int maxHealth = 3;
-    [SerializeField] protected int health { get; private set; }
+    [SerializeField] public int health;
 
     public enum State
     {

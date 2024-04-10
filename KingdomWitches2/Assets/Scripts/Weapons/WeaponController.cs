@@ -62,8 +62,8 @@ public class WeaponController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire3"))
             weaponIDMod = -1;
-        else if (Input.GetButtonDown("Fire4"))
-            weaponIDMod = 1;
+        /*else if (Input.GetButtonDown("Fire4"))
+            weaponIDMod = 1;*/
 
         if(weaponIDMod != 0) 
         {    

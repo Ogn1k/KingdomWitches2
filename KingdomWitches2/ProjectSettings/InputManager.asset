@@ -103,7 +103,7 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire4
-    descriptiveName: Next Weapon
+    descriptiveName: interact
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: e

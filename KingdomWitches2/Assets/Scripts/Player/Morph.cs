@@ -18,7 +18,7 @@ public class Morph : MonoBehaviour
 
     void Start()
     {
-        player.position = playerPosition;
+        playerPosition = player.position;
         morhpCount = morphs.Count;
 
         morphObjects.Clear();

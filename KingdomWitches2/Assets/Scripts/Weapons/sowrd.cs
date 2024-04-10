@@ -64,8 +64,8 @@ public class sowrd : Weapon
     {
         combo = 0;
         attackBlocked = false;
-        animator.ResetTrigger("AttackTr");
-        animator.ResetTrigger("AttackTr2");
+        //animator.ResetTrigger("AttackTr");
+        //animator.ResetTrigger("AttackTr2");
     }
 
     IEnumerator DelayAttack()

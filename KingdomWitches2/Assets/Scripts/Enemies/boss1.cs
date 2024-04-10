@@ -9,18 +9,23 @@ public class boss1 : Entity
     public GameObject bossBar;
     Slider bossSlider;
     Animator animator;
+    BulletSpawner[] bulletSpawners;
 
     public Trigger activeTrigger;
 
     bool active = false;
     bool invincible = false;
 
+    
     public GameObject bulletPrefab;
     public float timer = 0;
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animator =  GetComponent<Animator>();
         bossSlider = bossBar.GetComponent<Slider>();
+        bulletSpawners = GetComponents<BulletSpawner>();
+        foreach (var bulletSpawner in bulletSpawners)
+            bulletSpawner.enabled = false;
         bossSlider.maxValue = maxHealth;
         bossBar.SetActive(false);
     }
@@ -79,18 +84,25 @@ public class boss1 : Entity
     
     void BossActing()
     {
+
+        if(health >= 8) animator.SetInteger("stage", 0);
+        if(8 > health && health > 4) animator.SetInteger("stage", 2);
+        if(health <= 4) animator.SetInteger("stage", 1);
+
         switch (animator.GetInteger("stage"))
         { 
             case 0:
+                foreach (var bulletSpawner in bulletSpawners)
+                    bulletSpawner.enabled = false;
                 break;
             case 1:
-                timer += Time.deltaTime;
                 transform.Rotate(Vector3.forward, Time.deltaTime *30);
-                if(timer >= 2)
-                {
-                    Stage1();
-                    timer = 0;
-                }    
+                Stage1();
+                break;
+            case 2:
+                foreach (var bulletSpawner in bulletSpawners)
+                    bulletSpawner.enabled = false;
+                Stage2();
                 break;
         }
 
@@ -98,19 +110,13 @@ public class boss1 : Entity
 
     void Stage1()
     {
-        float timer1=0;
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        timer1 += Time.deltaTime;
-        //bullet.transform.Translate(Vector3.right * 20 * Time.deltaTime);
-        if (timer1 >= 3f)
-        {
-            Destroy(bullet);
-            timer1= 0;
-        }
- 
-            
-            //bullet.GetComponent<Rigidbody2D>().AddForce(Vector3.right);
-            
+        foreach (var bulletSpawner in bulletSpawners)
+            bulletSpawner.enabled = true;
+    }
+
+    void Stage2()
+    {
+
     }
 
     IEnumerator InvincibleState()

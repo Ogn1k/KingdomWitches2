@@ -13,6 +13,7 @@ public class pitchfork : Weapon
     PolygonCollider2D bc;
     SerializedProperty asd;
     bool canPickUp;
+    public bool thrusted = false;
 
     public WeaponController controller;
     void Start()
@@ -71,31 +72,36 @@ public class pitchfork : Weapon
             if(col.gameObject.CompareTag("Player") && canPickUp)
             {
                 rb.freezeRotation = false;
-                rb.gravityScale = 1;
-                rb.mass = 1;
                 rb.constraints = RigidbodyConstraints2D.FreezePosition;
                 bc.enabled = false;
                 transform.SetParent(GameObject.Find("Holster").transform);
                 transform.position = col.transform.position + new Vector3(0,1,0);
                 fired = false;
+                thrusted = false;
                 controller.NextWeapon();
                 controller.weaponCount += 1;
             }
             if(col.gameObject.CompareTag("Enemy"))
             {
-                transform.SetParent(col.gameObject.transform);
+                Vector3 link = new Vector3(0,0,0);
+                if (!thrusted)
+                { 
+                    link = transform.position;
+                    thrusted = true;
+                }
                 rb.constraints = RigidbodyConstraints2D.FreezePosition;
-                rb.gravityScale = 0;
-                rb.mass = 0;
                 rb.freezeRotation = true;
-                if(col.gameObject.GetComponent<Entity>().state == Entity.State.Died)
+               
+                //transform.position = col.transform.position + link;
+                transform.SetParent(col.gameObject.transform);
+
+                if (col.gameObject.GetComponent<Entity>().state == Entity.State.Died)
                 {
+                    thrusted = false;
                     transform.SetParent(null);
                     rb.constraints = RigidbodyConstraints2D.None;
-                    bc.enabled = true;
+                    //bc.enabled = true;
                     rb.freezeRotation = false;
-                    rb.gravityScale = 1;
-                    rb.mass = 1;
                 }
             }
         }
@@ -119,13 +125,18 @@ public class pitchfork : Weapon
 
     public void Throw()
     {
+        
         rb.AddForce(throwVector);
     }
 
     IEnumerator PickUpDelay()
     {
         canPickUp = false;
-        yield return new WaitForSeconds(0.3f);
+        gameObject.layer = 0;
+        rb.excludeLayers = LayerMask.GetMask("Player");
+        yield return new WaitForSeconds(0.4f);
         canPickUp = true;
+        gameObject.layer = 3;
+        rb.excludeLayers = LayerMask.GetMask("Nothing");
     }
 }
