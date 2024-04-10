@@ -9,7 +9,7 @@ public class boss1 : Entity
     public GameObject bossBar;
     Slider bossSlider;
     Animator animator;
-    BulletSpawner[] bulletSpawners;
+    GameObject bulletSpawners;
 
     public Trigger activeTrigger;
 
@@ -23,9 +23,9 @@ public class boss1 : Entity
     {
         animator =  GetComponent<Animator>();
         bossSlider = bossBar.GetComponent<Slider>();
-        bulletSpawners = GetComponents<BulletSpawner>();
-        foreach (var bulletSpawner in bulletSpawners)
-            bulletSpawner.enabled = false;
+        bulletSpawners = GameObject.Find("BulletSpawner");
+
+        bulletSpawners.SetActive(false);
         bossSlider.maxValue = maxHealth;
         bossBar.SetActive(false);
     }
@@ -92,17 +92,15 @@ public class boss1 : Entity
         switch (animator.GetInteger("stage"))
         { 
             case 0:
-                foreach (var bulletSpawner in bulletSpawners)
-                    bulletSpawner.enabled = false;
+                bulletSpawners.SetActive(false);
                 break;
             case 1:
-                transform.Rotate(Vector3.forward, Time.deltaTime *30);
-                Stage1();
+                //transform.Rotate(Vector3.forward, Time.deltaTime *30);
+                //Stage1();
                 break;
             case 2:
-                foreach (var bulletSpawner in bulletSpawners)
-                    bulletSpawner.enabled = false;
-                Stage2();
+                bulletSpawners.SetActive(false);
+
                 break;
         }
 
@@ -110,13 +108,19 @@ public class boss1 : Entity
 
     void Stage1()
     {
-        foreach (var bulletSpawner in bulletSpawners)
-            bulletSpawner.enabled = true;
+        bulletSpawners.SetActive(true);
     }
 
-    void Stage2()
+    public void Jumped()
     {
+        animator.SetTrigger("jumped");
+        bulletSpawners.SetActive(true);
+    }
 
+    public void AttackEnd()
+    {
+        animator.SetTrigger("attackEnd");
+        bulletSpawners.SetActive(false);
     }
 
     IEnumerator InvincibleState()
