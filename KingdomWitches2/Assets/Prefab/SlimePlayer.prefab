@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4660174499192210758}
   - component: {fileID: 740056453116558448}
-  - component: {fileID: 8327611079014723750}
-  - component: {fileID: 255051062996414314}
+  - component: {fileID: 6640446930513627654}
   - component: {fileID: 6224938702435263534}
   - component: {fileID: 1772707936344348671}
   - component: {fileID: 1808834056766168740}
@@ -90,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8327611079014723750
+--- !u!114 &6640446930513627654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,30 +106,6 @@ MonoBehaviour:
     m_Bits: 8
   horizontalRayCount: 4
   verticalRayCount: 5
---- !u!114 &255051062996414314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8600277308041593277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37d049fd1b7d9b64ba99fcbd835c746b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 3
-  health: 0
-  state: 0
-  maxJumpHeight: 3
-  minJumpHeight: 1.5
-  timeToJumpApex: 0.4
-  accelerationTimeGrounded: 0.1
-  accelerationTimeAirborneMultiplier: 2
-  moveSpeed: 6
-  hpPrefab: {fileID: 7252459381500211459, guid: 2cd001be26e830e4b999ca23cde976c9, type: 3}
-  canDash: 1
-  isDashing: 0
 --- !u!95 &6224938702435263534
 Animator:
   serializedVersion: 5
@@ -184,8 +159,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.04236889, y: -0.10105097}
-  m_Size: {x: 0.8980503, y: 0.8980503}
+  m_Offset: {x: -0.04236889, y: -0.030698657}
+  m_Size: {x: 0.8980503, y: 0.89805055}
   m_Direction: 0
 --- !u!50 &1808834056766168740
 Rigidbody2D:
@@ -246,7 +221,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.047262073, y: -0.060765386}
+  m_Offset: {x: -0.053124785, y: -0.07444501}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -257,5 +232,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.93959403, y: 0.81806445}
+  m_Size: {x: 0.9278686, y: 0.7438035}
   m_EdgeRadius: 0

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: testmorph
   description: babababa
-  morphPrefab: {fileID: 5531199002862068344, guid: badda28def485244794f224e87b07706, type: 3}
+  morphPrefab: {fileID: 8600277308041593277, guid: a6497b0ff6bca92448e4a3aa6f13c67f, type: 3}
   MorphTag: Prop
   SoundPrefab: {fileID: 0}
