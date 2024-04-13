@@ -77,7 +77,8 @@ public class Morph : MonoBehaviour
     {
         if (Input.GetButtonDown("R") && !playerCpt.isDashing && playerCpt.health > 0 )
         {
-            //
+            playerCpt.invincible = false;
+            playerCpt.spriteRenderer.enabled = true;
             playerPosition = currentMorph.transform.position + new Vector3(0, currentMorph.transform.localScale.y/3,0);
             morphID = (morphID + 1 + morhpCount) % morhpCount;
             InitMorphs();

@@ -18,7 +18,7 @@ public class Player : Entity
 
     public static event Action onPlayerDamaged;
 
-    bool invincible;
+    public bool invincible;
     bool forceApplied;
 
     public float moveSpeed = 6f;
@@ -33,10 +33,10 @@ public class Player : Entity
     bool facingRight;
 
     Animator animator;
-    SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     Controller2D controller;
 
-    int hpCount = 0;
+    //int hpCount = 0;
     public GameObject hpPrefab;
     List<GameObject> hp = new List<GameObject>();
 
@@ -45,7 +45,7 @@ public class Player : Entity
 
     public bool canDash = true;
     public bool isDashing;
-    float dashPower = 24;
+    //float dashPower = 24;
     float dashTime = 0.2f;
     float dashCooldown = 1;
 
