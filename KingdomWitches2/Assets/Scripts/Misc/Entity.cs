@@ -22,8 +22,8 @@ public class Entity : MonoBehaviour
         state = State.Living;
     }
 
-    public void AddHealth(int m) { ModHealth(m); }
-    public void SubtractHealth(int m) { ModHealth(-m); }
+    protected void AddHealth(int m) { ModHealth(m); }
+    protected void SubtractHealth(int m) { ModHealth(-m); }
 
     private void ModHealth(int m)
     {

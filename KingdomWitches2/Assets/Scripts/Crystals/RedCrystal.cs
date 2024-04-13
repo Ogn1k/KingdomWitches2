@@ -24,7 +24,7 @@ public class RedCrystal : MonoBehaviour
                 }
                 else
                 {
-                    player.AddHealth(hpUp);
+                    player.ApplyHeal(hpUp);
                 }
             }
             Destroy(gameObject);

@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 2
+  health: 0
   state: 0
   canSeePlayer: 1
   speed: 3

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(PlayerController))]
+[RequireComponent(typeof(Controller2D))]
 public class Player : Entity
 {
 
@@ -34,7 +34,7 @@ public class Player : Entity
 
     Animator animator;
     SpriteRenderer spriteRenderer;
-    PlayerController controller;
+    Controller2D controller;
 
     int hpCount = 0;
     public GameObject hpPrefab;
@@ -80,6 +80,12 @@ public class Player : Entity
             }
         }
 
+    }
+
+    public void ApplyHeal(int heal)
+    {
+        AddHealth(heal);
+        onPlayerDamaged?.Invoke();
     }
 
     public IEnumerator addBuff(string buff, int buffStrength, float duration)
@@ -129,7 +135,7 @@ public class Player : Entity
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        controller = GetComponent<PlayerController>();
+        controller = GetComponent<Controller2D>();  
         //Initialize Vertical Values
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -140,7 +146,7 @@ public class Player : Entity
 
     private void OnEnable() { onPlayerDamaged += DrawHearts; }
 
-    private void OnDisable() { onPlayerDamaged += DrawHearts; }
+    private void OnDisable() { onPlayerDamaged -= DrawHearts; }
 
     private void DrawHearts()
     {
@@ -172,6 +178,7 @@ public class Player : Entity
     {
         foreach(GameObject hpObj in hp)
             Destroy(hpObj);
+        hp.Clear(); 
         hp = new List<GameObject>();
     }
 
@@ -187,6 +194,7 @@ public class Player : Entity
         Vertical();
         ApplyMovement();
 
+        //print(hp.Count);
     }
 
     private void GetInput()
