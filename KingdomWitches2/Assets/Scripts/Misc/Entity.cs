@@ -47,7 +47,7 @@ public class Entity : MonoBehaviour
     protected virtual void Die()
     {
         state = State.Died;
-        Debug.Log("lol u died");
+        Debug.Log("obj " + gameObject.name + " died");
         //
     }
 }

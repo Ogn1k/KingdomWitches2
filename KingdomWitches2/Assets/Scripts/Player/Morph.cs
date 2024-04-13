@@ -14,12 +14,18 @@ public class Morph : MonoBehaviour
     Vector3 playerPosition;
     
     public Transform player;
-    public FollowCamera camera;
+    public FollowCamera fcamera;
+
+    Player playerCpt;
+
+    //public Morph instance;
 
     void Start()
     {
+        //instance = this;
         playerPosition = player.position;
         morhpCount = morphs.Count;
+        playerCpt = player.GetComponent<Player>();
 
         morphObjects.Clear();
         for (int i = 0; i < morhpCount; i++)
@@ -40,9 +46,10 @@ public class Morph : MonoBehaviour
             InitMorphs();
         }
     }
-    void Update()
+
+    private void Update()
     {
-        NextMorph();
+        NextMorph();   
     }
 
     private void InitMorphs()
@@ -56,21 +63,24 @@ public class Morph : MonoBehaviour
         currentMorph = morphObjects[morphID];
         currentMorph.transform.position = playerPosition;
         if (currentMorph.tag != "Player")
+        {
+            player.GetComponent<Player>().canDash = true;
             currentMorph.tag = "Morph";
+        }
+            
         currentMorph.transform.rotation = new Quaternion(0, 0, 0, 0);
-        camera.playerTransform = currentMorph.transform;
+        fcamera.playerTransform = currentMorph.transform;
         currentMorph.gameObject.SetActive(true);
     }
 
-    private void NextMorph()
+    public void NextMorph()
     {
-        if (Input.GetButtonDown("R"))
+        if (Input.GetButtonDown("R") && !playerCpt.isDashing && playerCpt.health > 0 )
         {
+            //
             playerPosition = currentMorph.transform.position;
             morphID = (morphID + 1 + morhpCount) % morhpCount;
             InitMorphs();
         }
     }
-
-    
 }

@@ -85,13 +85,17 @@ public class boss1 : Entity
     void BossActing()
     {
 
-        if(health >= 8) animator.SetInteger("stage", 0);
-        if(8 > health && health > 4) animator.SetInteger("stage", 2);
+        if (health >= 8) animator.SetInteger("stage", 0);
+        if (8 > health && health > 4)
+        {
+            animator.SetTrigger("wakeup"); animator.SetInteger("stage", 2);
+        }
         if(health <= 4) animator.SetInteger("stage", 1);
 
         switch (animator.GetInteger("stage"))
         { 
             case 0:
+                
                 bulletSpawners.SetActive(false);
                 break;
             case 1:

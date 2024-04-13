@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
@@ -15,7 +16,7 @@ public class Player : Entity
     public float accelerationTimeGrounded = .1f;
     public float accelerationTimeAirborneMultiplier = 2f;
 
-    public float timeInvincible = 2.0f;
+    public static event Action onPlayerDamaged;
 
     bool invincible;
     bool forceApplied;
@@ -42,8 +43,8 @@ public class Player : Entity
     float lastButtonPress;
     //float timeSinceLastPress;
 
-    bool canDash = true;
-    bool isDashing;
+    public bool canDash = true;
+    public bool isDashing;
     float dashPower = 24;
     float dashTime = 0.2f;
     float dashCooldown = 1;
@@ -69,16 +70,9 @@ public class Player : Entity
         {
             
             SubtractHealth(damage);
+            onPlayerDamaged?.Invoke();
             SetVelocity(Vector2.up * 8.0f);
-            StartCoroutine(SetInvincible());
-            if(health > 0) 
-            {
-                for (int i = 0; i < damage; i++)
-                {
-                    hp[hpCount+i].GetComponent<RawImage>().color = Color.green;
-                }
-            }
-            hpCount++;
+            StartCoroutine(SetInvincible(2));
 
             if (state == State.Died)
             {
@@ -141,25 +135,57 @@ public class Player : Entity
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
 
-        for(int i = 0; i < maxHealth; i++) 
-        {
-            Vector2 tempu = GameObject.Find("PlayerHpBar").GetComponent<RectTransform>().offsetMax;
-            hp.Add(Instantiate(hpPrefab, GameObject.Find("PHPBGrid").transform.position , Quaternion.identity, GameObject.Find("PHPBGrid").transform));
-            GameObject.Find("PlayerHpBar").GetComponent<RectTransform>().offsetMax = tempu + new Vector2((i * 75), 0);
-            hp[i].GetComponent<RawImage>().color = Color.white; 
+        DrawHearts();
+    }
+
+    private void OnEnable() { onPlayerDamaged += DrawHearts; }
+
+    private void OnDisable() { onPlayerDamaged += DrawHearts; }
+
+    private void DrawHearts()
+    {
+        ClearHearts();
+        int heartsToMake = (int)((maxHealth / 2) + maxHealth % 2);
+        for(int i = 0; i < heartsToMake; i++) 
+        { 
+            CreateHearts();
         }
+
+        for(int i = 0; i < hp.Count; i++)
+        {
+            int heartStatusRemainder = (int)Mathf.Clamp(health - (i * 2), 0, 2);
+            print(heartStatusRemainder);
+            hp[i].GetComponent<hearts>().SetHeartImage((HeartStatus)heartStatusRemainder);
+        }
+    }
+
+    private void CreateHearts()
+    {
+            //Vector2 tempu = GameObject.Find("PlayerHpBar").GetComponent<RectTransform>().offsetMax;
+        GameObject heartObject = Instantiate(hpPrefab, GameObject.Find("PHPBGrid").transform.position, Quaternion.identity, GameObject.Find("PHPBGrid").transform);
+        heartObject.GetComponent<hearts>().SetHeartImage(HeartStatus.Empty);
+        hp.Add(heartObject);
+        //GameObject.Find("PlayerHpBar").GetComponent<RectTransform>().offsetMax = tempu + new Vector2((i * 75), 0
+    }
+
+    private void ClearHearts()
+    {
+        foreach(GameObject hpObj in hp)
+            Destroy(hpObj);
+        hp = new List<GameObject>();
     }
 
     private void Update()
     {
-        //quitGame();
         GetInput();
+        QuitGame();
+        ReloadScene();
+
         Animation();
+
         Horizontal();
         Vertical();
         ApplyMovement();
-
-
 
     }
 
@@ -207,12 +233,15 @@ public class Player : Entity
         gravity = 0;
         float originMS = moveSpeed;
         moveSpeed = 30;
-        float originTI = timeInvincible;
-        timeInvincible = dashTime;
-        SetInvincible();
+        StartCoroutine(SetInvincible(dashTime));
+
+        float targetVelocityX = -General.Direction2Vector(direction).x*5 * moveSpeed;
+        velocity.x = Mathf.SmoothDamp(-General.Direction2Vector(direction).x*5, targetVelocityX, ref velocityXSmoothing,
+            accelerationTimeGrounded * 0.8f);
+        controller.Move(velocity * Time.deltaTime);
+        
         yield return new WaitForSeconds(dashTime);
         moveSpeed = originMS;
-        timeInvincible = originTI;
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
@@ -277,7 +306,7 @@ public class Player : Entity
         forceApplied = true;
     }
 
-    private IEnumerator SetInvincible()
+    private IEnumerator SetInvincible(float timeInvincible)
     {
 
         invincible = true;
@@ -297,11 +326,19 @@ public class Player : Entity
 
     }
 
-/*    private void quitGame()
+    private void QuitGame()
     {
-        if (Input.GetButton("Exit"))
+        if (Input.GetButtonDown("Cancel"))
         {
-            Application.Quit();
+            SceneManager.LoadScene("Menu");
         }
-    }*/
+    }
+
+    private void ReloadScene()
+    {
+        if(Input.GetButtonDown("Backspace"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
 }

@@ -11,7 +11,6 @@ public class pitchfork : Weapon
     LineRenderer lr;
     Vector3 mousePos;
     PolygonCollider2D bc;
-    SerializedProperty asd;
     bool canPickUp;
     public bool thrusted = false;
 
@@ -75,7 +74,7 @@ public class pitchfork : Weapon
                 rb.constraints = RigidbodyConstraints2D.FreezePosition;
                 bc.enabled = false;
                 transform.SetParent(GameObject.Find("Holster").transform);
-                transform.position = col.transform.position + new Vector3(0,1,0);
+                SetPosition();
                 fired = false;
                 thrusted = false;
                 controller.NextWeapon();
@@ -106,6 +105,22 @@ public class pitchfork : Weapon
             }
         }
 
+    }
+
+    void SetPosition()
+    {
+        Transform holster = controller.gameObject.transform;
+        GameObject player = GameObject.Find("Player");
+        if (player.GetComponent<Player>().GetDirection() == Direction.LEFT)
+        {
+            transform.position = player.transform.position + new Vector3(0.7f, -0.2f, 0);
+            holster.localScale = new Vector3(1, holster.localScale.y, holster.localScale.z);
+        }
+        else if (player.GetComponent<Player>().GetDirection() == Direction.RIGHT)
+        {
+            transform.position = player.transform.position + new Vector3(-0.7f, -0.2f, 0);
+            holster.localScale = new Vector3(-1, holster.localScale.y, holster.localScale.z);
+        }
     }
 
     void CalculateThrowVector()

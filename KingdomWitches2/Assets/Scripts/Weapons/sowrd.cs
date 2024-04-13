@@ -29,12 +29,12 @@ public class sowrd : Weapon
     {
         if(player.GetComponent<Player>().GetDirection() == Direction.LEFT) 
         { 
-            transform.position = player.transform.position + new Vector3(0.29f, -0.12f, 0);
+            transform.position = player.transform.position + new Vector3(0.7f, -0.2f, 0);
             holster.localScale = new Vector3(1, holster.localScale.y, holster.localScale.z);
         }
         else if(player.GetComponent<Player>().GetDirection() == Direction.RIGHT)
         {
-            transform.position = player.transform.position + new Vector3(-0.29f, -0.12f, 0);
+            transform.position = player.transform.position + new Vector3(-0.7f, -0.2f, 0);
             holster.localScale = new Vector3(-1, holster.localScale.y, holster.localScale.z);
         }
 
