@@ -101,8 +101,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  health: 0
+  itemDrop: []
   state: 0
-  canSeePlayer: 0
+  canSeePlayer: 1
   speed: 5
   foundRadius: 6.5
   timeInvincible: 0.8

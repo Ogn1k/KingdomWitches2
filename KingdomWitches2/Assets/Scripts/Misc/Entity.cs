@@ -8,6 +8,8 @@ public class Entity : MonoBehaviour
     public int maxHealth = 3;
     [SerializeField] public int health;
 
+    [SerializeField] public GameObject[] itemDrop;
+
     public enum State
     {
         Living,
@@ -48,6 +50,11 @@ public class Entity : MonoBehaviour
     {
         state = State.Died;
         Debug.Log("obj " + gameObject.name + " died");
+        if (itemDrop != null)
+            foreach (var item in itemDrop)
+            {
+                GameObject drop = Instantiate(item, transform.position, transform.rotation) as GameObject;
+            }
         //
     }
 }
