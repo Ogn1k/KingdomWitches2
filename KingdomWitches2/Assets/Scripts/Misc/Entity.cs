@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[System.Serializable]
+public struct Drop
+{
+    public GameObject dropItem;
+    public int dropChance;
+    public int dropAmount;
+}
+
 public class Entity : MonoBehaviour
 {
     public int maxHealth = 3;
     [SerializeField] public int health;
 
-    [SerializeField] public GameObject[] itemDrop;
+    [SerializeField] public List<Drop> dropList = new List<Drop>();
 
     public enum State
     {
@@ -50,11 +58,19 @@ public class Entity : MonoBehaviour
     {
         state = State.Died;
         Debug.Log("obj " + gameObject.name + " died");
-        if (itemDrop != null)
-            foreach (var item in itemDrop)
+        if (dropList != null) ///дроп с моба
+            foreach (var item in dropList)
             {
-                GameObject drop = Instantiate(item, transform.position, transform.rotation) as GameObject;
+                System.Random rNum = new System.Random();
+                if (rNum.Next(0, 100) < item.dropChance)
+                {
+                    for (int i = 0; i < item.dropAmount; i++)
+                    {
+                        GameObject drop = Instantiate(item.dropItem, transform.position, transform.rotation) as GameObject;
+                    }
+                }
             }
+
         //
     }
 }
